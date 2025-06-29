@@ -1,0 +1,68 @@
+{
+    "general": {
+        "language": "Sprache",
+        "settings": "Einstellungen",
+        "logout": "Abmelden",
+        "email": "E-Mail",
+        "uploadImage": "Bild hochladen",
+        "upload": "Hochladen",
+        "update": "Aktualisieren",
+        "month": "Monat",
+        "year": "Jahr",
+        "apply": "Anwenden",
+        "piece": "Stück"
+    },
+    "theme": {
+        "light": "Licht",
+        "dark": "Dunkel",
+        "theme": "Thema"
+    },
+    "menus": {
+        "dashboard": "Dashboard",
+        "settings": "Einstellungen",
+        "profile": "Profil",
+        "add": "Hinzufügen",
+        "storeInformation": "Store Infos",
+        "coupons": "Gutscheine",
+        "create": "Erstellen"
+    },
+    "login": {
+        "username": "Benutzername",
+        "password": "Passwort",
+        "login": "Anmelden",
+        "clear": "Zurücksetzen"
+    },
+    "profile": {
+        "logo": "Logo",
+        "updateLogo": "Dein Logo aktualisieren",
+        "updateInfo": "Deine Informationen aktualisieren",
+        "name": "Betriebsname",
+        "email": "Email",
+        "phone": "Telefon",
+        "address": "Address",
+        "city": "Stadt",
+        "country": "Land",
+        "website": "Website",
+        "taxNumber": "Steuernummer",
+        "zipcode": "Postleitzahl",
+        "socialMedia": "Sozialmedien"
+    },
+    "coupons": {
+        "subheader": "Gutschein erstellen",
+        "type": "Gutschein Typ",
+        "percentage": "Rabatt Prozent",
+        "amount": "Rabatt Betrag",
+        "minPurchaceAmount": "Mindestbestellwert",
+        "maxDiscountAmount": "Maximaler Rabattbetrag",
+        "startDate": "Startdatum",
+        "endDate": "Enddatum",
+        "usageLimit": "Benutzelimit",
+        "usageLimitPerCustomer": "Benutzelimit pro Kunden",
+        "code": "Gutscheincode",
+        "only": "Nur",
+        "multiple": "Mehrfach",
+        "codeType": "Gutscheincode Typ",
+        "random": "Zufall",
+        "codeGenerated": "Gutscheincode erstellt"
+    }
+}

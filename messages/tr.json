@@ -1,0 +1,68 @@
+{
+    "general": {
+        "language": "Dil",
+        "settings": "Ayarlar",
+        "logout": "Çıkış",
+        "email": "E-posta",
+        "uploadImage": "Resim yükle",
+        "upload": "Yükle",
+        "update": "Güncelle",
+        "month": "Ay",
+        "year": "Yıl",
+        "apply": "Uygula",
+        "piece": "Adet"
+    },
+    "theme": {
+        "light": "Açık",
+        "dark": "Koyu",
+        "theme": "Tema"
+    },
+    "menus": {
+        "dashboard": "Yönetim Paneli",
+        "settings": "Ayarlar",
+        "profile": "Profil",
+        "add": "Ekle",
+        "storeInformation": "Mağaza Bilgileri",
+        "coupons": "Kuponlar",
+        "create": "Oluştur"
+    },
+    "login": {
+        "username": "Kullanıcı Adı",
+        "password": "Şifre",
+        "login": "Giriş Yap",
+        "clear": "Temizle"
+    },
+    "profile": {
+        "logo": "Logo",
+        "updateLogo": "Logonuzu güncelleyin",
+        "updateInfo": "Bilgilerinizi güncelleyin",
+        "name": "Mağaza Adı",
+        "email": "E-posta",
+        "phone": "Telefon",
+        "address": "Adres",
+        "city": "Şehir",
+        "country": "Ülke",
+        "website": "Websitesi",
+        "taxNumber": "Vergi Numarası",
+        "zipcode": "Posta Kodu",
+        "socialMedia": "Sosyal Medya"
+    },
+    "coupons": {
+        "subheader": "Kupon oluştur",
+        "type": "Kupon Tipi",
+        "percentage": "İndirim Yüzdesi",
+        "amount": "İndirim Miktarı",
+        "minPurchaceAmount": "Minimum Alışveriş Miktarı",
+        "maxDiscountAmount": "Maksimum İndirim Miktarı",
+        "startDate": "Başlangıç Tarihi",
+        "endDate": "Bitiş Tarihi",
+        "usageLimit": "Kullanım Sınırı",
+        "usageLimitPerCustomer": "Müşteri Bazında Kullanım Sınırı",
+        "code": "Kupon Kodu",
+        "only": "Tekli",
+        "multiple": "Çoklu",
+        "codeType": "Kupon Kodu Tipi",
+        "random": "Rastgele",
+        "codeGenerated": "Kupon Kodu Oluşturuldu"
+    }
+}

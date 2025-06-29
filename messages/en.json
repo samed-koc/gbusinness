@@ -1,0 +1,68 @@
+{
+    "general": {
+        "language": "Language",
+        "settings": "Settings",
+        "logout": "Logout",
+        "email": "Email",
+        "uploadImage": "Upload Image",
+        "upload": "Upload",
+        "update": "Update",
+        "month": "Month",
+        "year": "Year",
+        "apply": "Apply",
+        "piece": "Piece"
+    },
+    "theme": {
+        "light": "Light",
+        "dark": "Dark",
+        "theme": "Theme"
+    },
+    "menus": {
+        "dashboard": "Dashboard",
+        "settings": "Settings",
+        "profile": "Profile",
+        "add": "Add",
+        "storeInformation": "Store Infos",
+        "coupons": "Coupons",
+        "create": "Create"
+    },
+    "login": {
+        "username": "Username",
+        "password": "Password",
+        "login": "Login",
+        "clear": "Clear"
+    },
+    "profile": {
+        "logo": "Logo",
+        "updateLogo": "Update your logo",
+        "updateInfo": "Update your information",
+        "name": "Store Name",
+        "email": "Email",
+        "phone": "Phone",
+        "address": "Address",
+        "city": "City",
+        "country": "Country",
+        "website": "Website",
+        "taxNumber": "Tax Number",
+        "zipcode": "Zipcode",
+        "socialMedia": "Social Media"
+    },
+    "coupons": {
+        "subheader": "Create a new coupon",
+        "type": "Coupon Type",
+        "percentage": "Discount Percentage",
+        "amount": "Discount Amount",
+        "minPurchaceAmount": "Min. Purchace Amount",
+        "maxDiscountAmount": "Max. Discount Amount",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "usageLimit": "Usage Limit",
+        "usageLimitPerCustomer": "Usage Limit Per Customer",
+        "code": "Coupon Code",
+        "only": "Only",
+        "multiple": "Multiple",
+        "codeType": "Code Type",
+        "random": "Random",
+        "codeGenerated": "Code Generated"
+    }
+}
