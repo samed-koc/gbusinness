@@ -30,7 +30,7 @@ export default function TranslationProvider({ children }) {
   }, [language]);
 
   return (
-    <NextIntlClientProvider messages={messages} locale={language}>
+    <NextIntlClientProvider messages={messages} locale={language} timeZone="Europe/Istanbul">
       {children}
     </NextIntlClientProvider>
   );

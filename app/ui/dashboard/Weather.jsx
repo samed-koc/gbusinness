@@ -18,18 +18,42 @@ export default function Weather() {
 
   React.useEffect(() => {
     async function getWeather() {
-      const response = await fetch(
-        `https://api.collectapi.com/weather/getWeather?data.lang=${lang}&data.city=${city}`,
-        {
-          headers: {
-            "content-type": "application/json",
-            authorization: process.env.NEXT_PUBLIC_WEATHER_API_KEY,
-          },
+      try {
+        const authHeader = process.env.NEXT_PUBLIC_WEATHER_API_KEY
+          ? process.env.NEXT_PUBLIC_WEATHER_API_KEY.startsWith("apikey ")
+            ? process.env.NEXT_PUBLIC_WEATHER_API_KEY
+            : `apikey ${process.env.NEXT_PUBLIC_WEATHER_API_KEY}`
+          : undefined;
+
+        const response = await fetch(
+          `https://api.collectapi.com/weather/getWeather?data.lang=${lang}&data.city=${city}`,
+          {
+            headers: {
+              "content-type": "application/json",
+              authorization: authHeader,
+            },
+          }
+        );
+
+        const text = await response.text();
+        if (!response.ok) {
+          console.error("Weather API error:", response.status, text);
+          return;
         }
-      );
-      const data = await response.json();
-      setWeather(data.result[0]);
-      setForecast(data.result);
+
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (err) {
+          console.error("Weather API returned invalid JSON:", text);
+          return;
+        }
+
+        setWeather(data.result[0]);
+        setForecast(data.result);
+      } catch (err) {
+        console.error("Failed to fetch weather:", err);
+      }
     }
 
     getWeather();

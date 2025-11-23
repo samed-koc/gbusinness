@@ -13,17 +13,41 @@ export default function News() {
 
   React.useEffect(() => {
     async function getNews() {
-      const response = await fetch(
-        `https://api.collectapi.com/news/getNews?country=${lang}&tag=economy`,
-        {
-          headers: {
-            "content-type": "application/json",
-            authorization: process.env.NEXT_PUBLIC_WEATHER_API_KEY,
-          },
+      try {
+        const authHeader = process.env.NEXT_PUBLIC_WEATHER_API_KEY
+          ? process.env.NEXT_PUBLIC_WEATHER_API_KEY.startsWith("apikey ")
+            ? process.env.NEXT_PUBLIC_WEATHER_API_KEY
+            : `apikey ${process.env.NEXT_PUBLIC_WEATHER_API_KEY}`
+          : undefined;
+
+        const response = await fetch(
+          `https://api.collectapi.com/news/getNews?country=${lang}&tag=economy`,
+          {
+            headers: {
+              "content-type": "application/json",
+              authorization: authHeader,
+            },
+          }
+        );
+
+        const text = await response.text();
+        if (!response.ok) {
+          console.error("News API error:", response.status, text);
+          return;
         }
-      );
-      const data = await response.json();
-      setNews(data.result);
+
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (err) {
+          console.error("News API returned invalid JSON:", text);
+          return;
+        }
+
+        setNews(data.result);
+      } catch (err) {
+        console.error("Failed to fetch news:", err);
+      }
     }
 
     getNews();
@@ -45,7 +69,7 @@ export default function News() {
     }
   };
 
-  return news ? (
+  return Array.isArray(news) && news.length > 0 ? (
     <Card sx={{ p: 2 }}>
       <Stack direction={{ xs: "column", lg: "row" }} spacing={2}>
         {news[currentNews].image && (
