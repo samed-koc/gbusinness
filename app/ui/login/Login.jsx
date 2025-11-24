@@ -15,13 +15,14 @@ export default function Login() {
     const [password, setPassword] = React.useState('');
 
   return (
+  <>
     <Stack
       direction={"row"}
       width={"100%"}
       height={"100vh"}
       justifyContent={"center"}
       alignItems={"center"}
-    >
+      >
       <Card sx={{ padding: 2, width: "100%", maxWidth: 400, margin: 2 }}>
         <Stack direction={"column"} justifyContent={"center"} alignItems={"center"} my={2}>
             <Logo />
@@ -35,5 +36,6 @@ export default function Login() {
         </CardActions>
       </Card>
     </Stack>
+      </>
   );
 }
