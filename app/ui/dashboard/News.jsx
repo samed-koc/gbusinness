@@ -10,48 +10,62 @@ export default function News() {
   const [news, setNews] = React.useState();
   const [currentNews, setCurrentNews] = React.useState(0);
   const { lang } = useSettings();
+const previousLang = React.useRef(null);
+let debounceTimer = null;
 
-  React.useEffect(() => {
-    async function getNews() {
-      try {
-        const authHeader = process.env.NEXT_PUBLIC_WEATHER_API_KEY
-          ? process.env.NEXT_PUBLIC_WEATHER_API_KEY.startsWith("apikey ")
-            ? process.env.NEXT_PUBLIC_WEATHER_API_KEY
-            : `apikey ${process.env.NEXT_PUBLIC_WEATHER_API_KEY}`
-          : undefined;
+React.useEffect(() => {
+  async function getNews() {
+    try {
+      const authHeader = process.env.NEXT_PUBLIC_WEATHER_API_KEY
+        ? process.env.NEXT_PUBLIC_WEATHER_API_KEY.startsWith("apikey ")
+          ? process.env.NEXT_PUBLIC_WEATHER_API_KEY
+          : `apikey ${process.env.NEXT_PUBLIC_WEATHER_API_KEY}`
+        : undefined;
 
-        const response = await fetch(
-          `https://api.collectapi.com/news/getNews?country=${lang}&tag=economy`,
-          {
-            headers: {
-              "content-type": "application/json",
-              authorization: authHeader,
-            },
-          }
-        );
-
-        const text = await response.text();
-        if (!response.ok) {
-          console.error("News API error:", response.status, text);
-          return;
+      const response = await fetch(
+        `https://api.collectapi.com/news/getNews?country=${lang}&tag=economy`,
+        {
+          headers: {
+            "content-type": "application/json",
+            authorization: authHeader,
+          },
         }
+      );
 
-        let data;
-        try {
-          data = JSON.parse(text);
-        } catch (err) {
-          console.error("News API returned invalid JSON:", text);
-          return;
-        }
+      const text = await response.text();
 
-        setNews(data.result);
-      } catch (err) {
-        console.error("Failed to fetch news:", err);
+      if (!response.ok) {
+        console.error("News API error:", response.status, text);
+        return;
       }
-    }
 
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (err) {
+        console.error("News API returned invalid JSON:", text);
+        return;
+      }
+
+      setNews(data.result);
+    } catch (err) {
+      console.error("Failed to fetch news:", err);
+    }
+  }
+
+  // Eğer lang değişmediyse hiçbir şey yapma
+  if (previousLang.current === lang) return;
+
+  previousLang.current = lang;
+
+  // Debounce ile aşırı istekleri önle
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => {
     getNews();
-  }, [lang]);
+  }, 1500);
+
+  return () => clearTimeout(debounceTimer);
+}, [lang]);
 
   const handleNextNews = () => {
     if (currentNews < news.length - 1) {

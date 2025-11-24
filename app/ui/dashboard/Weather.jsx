@@ -8,7 +8,6 @@ import React, { Suspense } from "react";
 import WeatherSkeleton from "../skeletons/WeatherSkeleton";
 
 export default function Weather() {
-  //const API = "apikey 0zCvR4sriZcVVcyxeU1Max:68wE1iSaAriO6s0A963yyk";
 
   const { lang } = useSettings();
 
@@ -16,48 +15,43 @@ export default function Weather() {
   const [forecast, setForecast] = React.useState([]);
   const [city, setCity] = React.useState("munich");
 
-  React.useEffect(() => {
-    async function getWeather() {
-      try {
-        const authHeader = process.env.NEXT_PUBLIC_WEATHER_API_KEY
-          ? process.env.NEXT_PUBLIC_WEATHER_API_KEY.startsWith("apikey ")
-            ? process.env.NEXT_PUBLIC_WEATHER_API_KEY
-            : `apikey ${process.env.NEXT_PUBLIC_WEATHER_API_KEY}`
-          : undefined;
+React.useEffect(() => {
+  if (!city || !lang) return; // ❗ parametreler yoksa API çağrısı yapma
 
-        const response = await fetch(
-          `https://api.collectapi.com/weather/getWeather?data.lang=${lang}&data.city=${city}`,
-          {
-            headers: {
-              "content-type": "application/json",
-              authorization: authHeader,
-            },
-          }
-        );
+  async function getWeather() {
+    try {
+      const authHeader = process.env.NEXT_PUBLIC_WEATHER_API_KEY
+        ? process.env.NEXT_PUBLIC_WEATHER_API_KEY.startsWith("apikey ")
+          ? process.env.NEXT_PUBLIC_WEATHER_API_KEY
+          : `apikey ${process.env.NEXT_PUBLIC_WEATHER_API_KEY}`
+        : undefined;
 
-        const text = await response.text();
-        if (!response.ok) {
-          console.error("Weather API error:", response.status, text);
-          return;
+      const response = await fetch(
+        `https://api.collectapi.com/weather/getWeather?city=${city}&lang=${lang}`,
+        {
+          headers: {
+            "content-type": "application/json",
+            authorization: authHeader,
+          },
         }
+      );
 
-        let data;
-        try {
-          data = JSON.parse(text);
-        } catch (err) {
-          console.error("Weather API returned invalid JSON:", text);
-          return;
-        }
+      const text = await response.text();
 
-        setWeather(data.result[0]);
-        setForecast(data.result);
-      } catch (err) {
-        console.error("Failed to fetch weather:", err);
+      if (!response.ok) {
+        console.error("Weather API error:", response.status, text);
+        return;
       }
-    }
 
-    getWeather();
-  }, [city]);
+      const data = JSON.parse(text);
+      setWeather(data.result);
+    } catch (err) {
+      console.error("Failed to fetch weather:", err);
+    }
+  }
+
+  getWeather();
+}, [city, lang]);
 
   return weather ? (
     <Card sx={{ pb: 2, pt: 1, width: "100%", maxWidth: { lg: 400 } }}>
