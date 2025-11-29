@@ -11,41 +11,17 @@ export default function Currency() {
 
   React.useEffect(() => {
     async function getCurrency() {
-      try {
-        const authHeader = process.env.NEXT_PUBLIC_WEATHER_API_KEY
-          ? process.env.NEXT_PUBLIC_WEATHER_API_KEY.startsWith("apikey ")
-            ? process.env.NEXT_PUBLIC_WEATHER_API_KEY
-            : `apikey ${process.env.NEXT_PUBLIC_WEATHER_API_KEY}`
-          : undefined;
-
-        const response = await fetch(
-          `https://api.collectapi.com/economy/allCurrency`,
-          {
-            headers: {
-              "content-type": "application/json",
-              authorization: authHeader,
-            },
-          }
-        );
-
-        const text = await response.text();
-        if (!response.ok) {
-          console.error("Currency API error:", response.status, text);
-          return;
+      const response = await fetch(
+        `https://api.collectapi.com/economy/allCurrency`,
+        {
+          headers: {
+            "content-type": "application/json",
+            authorization: process.env.NEXT_PUBLIC_WEATHER_API_KEY,
+          },
         }
-
-        let data;
-        try {
-          data = JSON.parse(text);
-        } catch (err) {
-          console.error("Currency API returned invalid JSON:", text);
-          return;
-        }
-
-        setCurrency(data.result);
-      } catch (err) {
-        console.error("Failed to fetch currency:", err);
-      }
+      );
+      const data = await response.json();
+      setCurrency(data.result);
     }
 
     getCurrency();

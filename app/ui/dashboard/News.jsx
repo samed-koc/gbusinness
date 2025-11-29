@@ -10,62 +10,24 @@ export default function News() {
   const [news, setNews] = React.useState();
   const [currentNews, setCurrentNews] = React.useState(0);
   const { lang } = useSettings();
-const previousLang = React.useRef(null);
-let debounceTimer = null;
 
-React.useEffect(() => {
-  async function getNews() {
-    try {
-      const authHeader = process.env.NEXT_PUBLIC_WEATHER_API_KEY
-        ? process.env.NEXT_PUBLIC_WEATHER_API_KEY.startsWith("apikey ")
-          ? process.env.NEXT_PUBLIC_WEATHER_API_KEY
-          : `apikey ${process.env.NEXT_PUBLIC_WEATHER_API_KEY}`
-        : undefined;
-
+  React.useEffect(() => {
+    async function getNews() {
       const response = await fetch(
         `https://api.collectapi.com/news/getNews?country=${lang}&tag=economy`,
         {
           headers: {
             "content-type": "application/json",
-            authorization: authHeader,
+            authorization: process.env.NEXT_PUBLIC_WEATHER_API_KEY,
           },
         }
       );
-
-      const text = await response.text();
-
-      if (!response.ok) {
-        console.error("News API error:", response.status, text);
-        return;
-      }
-
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch (err) {
-        console.error("News API returned invalid JSON:", text);
-        return;
-      }
-
+      const data = await response.json();
       setNews(data.result);
-    } catch (err) {
-      console.error("Failed to fetch news:", err);
     }
-  }
 
-  // Eğer lang değişmediyse hiçbir şey yapma
-  if (previousLang.current === lang) return;
-
-  previousLang.current = lang;
-
-  // Debounce ile aşırı istekleri önle
-  clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(() => {
     getNews();
-  }, 1500);
-
-  return () => clearTimeout(debounceTimer);
-}, [lang]);
+  }, [lang]);
 
   const handleNextNews = () => {
     if (currentNews < news.length - 1) {
@@ -83,7 +45,7 @@ React.useEffect(() => {
     }
   };
 
-  return Array.isArray(news) && news.length > 0 ? (
+  return news ? (
     <Card sx={{ p: 2 }}>
       <Stack direction={{ xs: "column", lg: "row" }} spacing={2}>
         {news[currentNews].image && (

@@ -5,26 +5,39 @@ import News from "@/app/ui/dashboard/News";
 import Weather from "@/app/ui/dashboard/Weather";
 import Welcome from "@/app/ui/dashboard/Welcome";
 import { Stack } from "@mui/material";
+import dynamic from "next/dynamic";
+import Form from "@/app/ui/components/Form";
+
 
 export default function Page() {
   return (
-    <Stack
-      direction={{ xs: "column", md: "row" }}
-      spacing={2}
-      width={"100%"}
-    >
+    <>
       <Stack
-        direction={"column"}
+        direction={{ xs: "column", md: "row" }}
         spacing={2}
         width={"100%"}
       >
-        <Welcome />
-        <News />
+        <Stack direction={"column"} spacing={2} width={"100%"}>
+          <Welcome />
+          <News />
+        </Stack>
+
+        <Stack direction={"column"} spacing={1} justifyContent={"space-between"}>
+          <Weather />
+          <Currency />
+        </Stack>
+
+        <Stack></Stack>
       </Stack>
-      <Stack direction={"column"} spacing={1} justifyContent={"space-between"}>
-        <Weather />
-        <Currency />
+
+      <Stack
+        direction={{ xs: "column", md: "row" }}
+        spacing={2}
+        width={"100%"}
+      >
+        {/* ✔ Artık sorunsuz çalışır */}
+        <Form />
       </Stack>
-    </Stack>
+    </>
   );
 }

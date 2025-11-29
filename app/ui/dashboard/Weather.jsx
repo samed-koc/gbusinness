@@ -4,57 +4,59 @@ import { cities } from "@/app/config/cities";
 import { useSettings } from "@/app/context/ThemeContext";
 import { splitWeather } from "@/app/utils/splitWeather";
 import { Card, Stack, Tab, Tabs, Typography } from "@mui/material";
-import React, { Suspense } from "react";
+import React from "react";
 import WeatherSkeleton from "../skeletons/WeatherSkeleton";
 
 export default function Weather() {
-
   const { lang } = useSettings();
 
-  const [weather, setWeather] = React.useState();
+  const [weather, setWeather] = React.useState(null);
   const [forecast, setForecast] = React.useState([]);
   const [city, setCity] = React.useState("munich");
 
-React.useEffect(() => {
-  if (!city || !lang) return; // ❗ parametreler yoksa API çağrısı yapma
+  // 👇 SSR hydration için çözüm
+  const [isClient, setIsClient] = React.useState(false);
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
 
-  async function getWeather() {
-    try {
-      const authHeader = process.env.NEXT_PUBLIC_WEATHER_API_KEY
-        ? process.env.NEXT_PUBLIC_WEATHER_API_KEY.startsWith("apikey ")
-          ? process.env.NEXT_PUBLIC_WEATHER_API_KEY
-          : `apikey ${process.env.NEXT_PUBLIC_WEATHER_API_KEY}`
-        : undefined;
+  React.useEffect(() => {
+    async function getWeather() {
+      try {
+        const response = await fetch(
+          `https://api.collectapi.com/weather/getWeather?data.lang=${lang}&data.city=${city}`,
+          {
+            headers: {
+              "content-type": "application/json",
+              authorization: `apikey ${process.env.NEXT_PUBLIC_WEATHER_API_KEY}`,
+            },
+          }
+        );
 
-      const response = await fetch(
-        `https://api.collectapi.com/weather/getWeather?city=${city}&lang=${lang}`,
-        {
-          headers: {
-            "content-type": "application/json",
-            authorization: authHeader,
-          },
+        const data = await response.json();
+        console.log("API RESPONSE:", data);
+
+        if (!data?.result || !Array.isArray(data.result)) {
+          console.error("API result formatı yanlış:", data);
+          return;
         }
-      );
 
-      const text = await response.text();
-
-      if (!response.ok) {
-        console.error("Weather API error:", response.status, text);
-        return;
+        setWeather(data.result[0]);
+        setForecast(data.result);
+      } catch (err) {
+        console.error("Weather API fetch error:", err);
       }
-
-      const data = JSON.parse(text);
-      setWeather(data.result);
-    } catch (err) {
-      console.error("Failed to fetch weather:", err);
     }
-  }
 
-  getWeather();
-}, [city, lang]);
+    if (isClient) getWeather(); // 👈 sadece client’ta fetch et
+  }, [city, lang, isClient]);
+
+  // 🛑 SSR sırasında hiçbir render yapılmaz → hydration mismatch biter
+  if (!isClient) return null;
 
   return weather ? (
     <Card sx={{ pb: 2, pt: 1, width: "100%", maxWidth: { lg: 400 } }}>
+      {/* Tabs */}
       <Stack
         direction={"row"}
         alignItems={"center"}
@@ -68,16 +70,18 @@ React.useEffect(() => {
           scrollButtons
           variant="scrollable"
         >
-          {cities.map((city) => (
+          {cities.map((c) => (
             <Tab
-              key={city}
-              value={city}
-              label={city}
+              key={c}
+              value={c}
+              label={c}
               sx={{ fontSize: "12px", textTransform: "capitalize" }}
             />
           ))}
         </Tabs>
       </Stack>
+
+      {/* Main weather */}
       <Stack
         direction={"row"}
         spacing={1}
@@ -92,6 +96,7 @@ React.useEffect(() => {
             style={{ width: "100%", maxWidth: "100px", height: "auto" }}
           />
         )}
+
         <Stack direction={"row"} spacing={1}>
           <Typography variant="h2">
             {weather.degree && splitWeather(weather.degree)}
@@ -99,6 +104,8 @@ React.useEffect(() => {
           <Typography variant="body1">°C</Typography>
         </Stack>
       </Stack>
+
+      {/* Forecast */}
       <Stack
         direction={"row"}
         spacing={1}
@@ -118,6 +125,7 @@ React.useEffect(() => {
                   style={{ width: "100%", maxWidth: "30px", height: "auto" }}
                 />
               )}
+
               <Stack direction={"row"} spacing={0.5}>
                 <Typography variant="body2">
                   {f.degree && splitWeather(f.degree)}

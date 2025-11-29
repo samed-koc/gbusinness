@@ -19,7 +19,7 @@ export default function Login() {
     <Stack
       direction={"row"}
       width={"100%"}
-      height={"100vh"}
+      height={"100vh"}Card
       justifyContent={"center"}
       alignItems={"center"}
       >
